@@ -1,6 +1,9 @@
 package dev.eliaschen.mito.db
 
 import com.mongodb.client.model.Filters.eq
+import com.mongodb.client.model.Filters.regex
+import com.mongodb.client.model.Sorts
+import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList
 import kotlinx.serialization.Serializable
@@ -25,6 +28,19 @@ data class WorkoutPayload(
     val poses: List<PosePayload> = emptyList(),
 )
 
+@Serializable
+data class Pagination(
+    val totalItem: Int,
+    val totalPage: Int,
+    val currentPage: Int,
+)
+
+@Serializable
+data class WorkoutResponse(
+    val page: Pagination,
+    val data: List<Workout>
+)
+
 private fun List<PosePayload>.toPoses(): List<Pose> {
     return map { Pose(location = it.location, delayMillis = it.delayMillis) }
 }
@@ -32,8 +48,15 @@ private fun List<PosePayload>.toPoses(): List<Pose> {
 object WorkoutDao {
     private val collection get() = Mongo.database.getCollection<Workout>("workouts")
 
-    suspend fun getAll(): List<Workout> {
-        return collection.find().toList()
+    suspend fun getAll(search: String, limit: Int, page: Int): WorkoutResponse {
+        val data = collection.find(regex("name", ".*$search.*"))
+            .sort(Sorts.descending("updatedAt"))
+        val pagination = Pagination(data.count(), data.count() / limit + if (data.count() % limit != 0) 1 else 0, page)
+        val list = data.skip((page - 1) * limit)
+            .limit(limit)
+            .toList()
+
+        return WorkoutResponse(pagination, list)
     }
 
     suspend fun getById(id: String): Workout? {
