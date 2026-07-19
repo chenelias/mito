@@ -7,6 +7,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 RUN git clone --depth 1 --branch ${FLUTTER_VERSION} https://github.com/flutter/flutter.git /opt/flutter
 ENV PATH="/opt/flutter/bin:$PATH"
+ENV PORT=80
 RUN flutter --version && flutter precache --web
 
 WORKDIR /app
