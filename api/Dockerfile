@@ -5,7 +5,7 @@ WORKDIR /app
 # Copy build scripts first so dependency downloads are cached between builds
 COPY gradlew gradle.properties settings.gradle.kts build.gradle.kts ./
 COPY gradle ./gradle
-RUN ./gradlew --no-daemon dependencies --quiet || true
+RUN chmod +x ./gradlew && ./gradlew --no-daemon dependencies --quiet || true
 
 COPY src ./src
 RUN ./gradlew --no-daemon buildFatJar

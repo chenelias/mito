@@ -1,0 +1,32 @@
+name: Deploy to Zeabur
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Deploy
+        env:
+          ZEABUR_TOKEN: ${{ secrets.ZEABUR_TOKEN }}
+          ZEABUR_PROJECT_ID: ${{ secrets.ZEABUR_PROJECT_ID }}
+          API_SERVICE_ID: ${{ secrets.API_SERVICE_ID }}
+          WEB_SERVICE_ID: ${{ secrets.WEB_SERVICE_ID }}
+        run: |
+          npx zeabur@latest auth login --token "$ZEABUR_TOKEN"
+          cd api
+          npx zeabur@latest deploy --project-id $ZEABUR_PROJECT_ID --service-id $API_SERVICE_ID
+          cd ..
+          cd web
+          npx zeabur@latest deploy --project-id $ZEABUR_PROJECT_ID --service-id $WEB_SERVICE_ID
