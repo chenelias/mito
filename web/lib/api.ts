@@ -36,7 +36,6 @@ export type WorkoutList = {
     data: Workout[]
 }
 
-// Server-side only: called from server components and server actions.
 const BASE = process.env.API_HOST ?? "http://localhost:8080"
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {

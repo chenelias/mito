@@ -21,7 +21,7 @@ import {
     verticalListSortingStrategy,
 } from "@dnd-kit/sortable"
 import {CSS} from "@dnd-kit/utilities"
-import {ArrowLeft, CircleCheck, GripVertical, Loader, Minus, Pencil, Plus, Timer, Trash2} from "lucide-react"
+import {ArrowLeft, CircleCheck, GripVertical, Loader, Minus, Pencil, Play, Plus, Timer, Trash2} from "lucide-react"
 import {Button, buttonVariants} from "@/components/ui/button"
 import {Card} from "@/components/ui/card"
 import {
@@ -269,12 +269,26 @@ export default function PaceEditor({workout}: { workout: Workout }) {
                         <p className="max-w-md truncate px-1 text-sm text-muted-foreground">{description}</p>
                     )}
                 </div>
-                <span className="ml-auto text-xs text-muted-foreground" aria-live="polite">
-                    {saveError ? <Badge variant={"destructive"}>
-                        {`儲存失敗`}
-                    </Badge> : isSaving ? <Loader className={"text-gray-500 animate-spin"} size={20} /> :
-                        <CircleCheck className={"text-green-500"} size={20}/>}
-                </span>
+                <div className="ml-auto flex items-center gap-3">
+                    <span className="text-xs text-muted-foreground" aria-live="polite">
+                        {saveError ? <Badge variant={"destructive"}>
+                            {`儲存失敗`}
+                        </Badge> : isSaving ? <Loader className={"text-gray-500 animate-spin"} size={20} /> :
+                            <CircleCheck className={"text-green-500"} size={20}/>}
+                    </span>
+                    {poses.length > 0 && (
+                        <Link
+                            href={`/player/${workout.id}`}
+                            aria-label="播放跑位"
+                            className={cn(
+                                buttonVariants({size: "icon-sm"}),
+                                "rounded-full bg-green-500 text-white hover:bg-green-600",
+                            )}
+                        >
+                            <Play className="fill-white"/>
+                        </Link>
+                    )}
+                </div>
             </div>
 
 
