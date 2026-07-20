@@ -170,7 +170,7 @@ export default function PacePlayer({workout}: { workout: Workout }) {
                     {controlled && (
                         <Badge variant="outline" className="mb-3 gap-1.5 border-red-500 text-red-500">
                             <Radio className="size-3.5 animate-pulse"/>
-                            遠程控制中 · {session.controllerName}
+                            遠端控制中 · {session.controllerName}
                         </Badge>
                     )}
                     <span className="text-sm text-muted-foreground">{workout.name || "未命名"}</span>
