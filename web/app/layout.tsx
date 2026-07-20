@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import RemoteProvider from "@/components/RemoteProvider";
 import NextTopLoader from "nextjs-toploader";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -45,8 +46,10 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <NextTopLoader color="#a3e635" height={3} showSpinner={false} shadow={false} />
         <RemoteProvider wsUrl={wsUrl()}>
-          <Header />
-          <div className="flex flex-1 flex-col">{children}</div>
+          <TooltipProvider delay={300}>
+            <Header />
+            <div className="flex flex-1 flex-col">{children}</div>
+          </TooltipProvider>
         </RemoteProvider>
       </body>
     </html>

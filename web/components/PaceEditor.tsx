@@ -37,6 +37,7 @@ import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
 import {Textarea} from "@/components/ui/textarea"
 import PaceGrid from "@/components/PaceGrid"
+import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip"
 import {Workout} from "@/lib/api"
 import {updateWorkoutAction} from "@/app/actions"
 import {cn} from "@/lib/utils"
@@ -115,15 +116,22 @@ function SortablePoseRow({
             )}
         >
             <div className="flex items-center gap-2">
-                <button
-                    type="button"
-                    aria-label="拖曳調整順序"
-                    className="-ml-1 cursor-grab touch-none rounded p-1 text-muted-foreground hover:text-foreground active:cursor-grabbing"
-                    {...attributes}
-                    {...listeners}
-                >
-                    <GripVertical className="size-5"/>
-                </button>
+                <Tooltip>
+                    <TooltipTrigger
+                        render={
+                            <button
+                                type="button"
+                                aria-label="拖曳調整順序"
+                                className="-ml-1 cursor-grab touch-none rounded p-1 text-muted-foreground hover:text-foreground active:cursor-grabbing"
+                                {...attributes}
+                                {...listeners}
+                            />
+                        }
+                    >
+                        <GripVertical className="size-5"/>
+                    </TooltipTrigger>
+                    <TooltipContent>拖曳調整順序</TooltipContent>
+                </Tooltip>
                 <span className="w-6 text-center text-sm text-muted-foreground tabular-nums">{index + 1}</span>
             </div>
             <Card className="w-fit shrink-0 rounded-lg p-3 shadow-none max-sm:self-center">
@@ -135,37 +143,58 @@ function SortablePoseRow({
             </Card>
             <div
                 className="flex items-center gap-1 max-sm:self-center sm:flex-1 sm:justify-center sm:gap-2">
-                <Button
-                    variant="outline"
-                    size="icon-sm"
-                    aria-label="減少秒數"
-                    disabled={pose.delayMillis <= MIN_DELAY}
-                    onClick={() => onChange({delayMillis: Math.max(MIN_DELAY, pose.delayMillis - DELAY_STEP)})}
-                >
-                    <Minus/>
-                </Button>
+                <Tooltip>
+                    <TooltipTrigger
+                        render={
+                            <Button
+                                variant="outline"
+                                size="icon-sm"
+                                aria-label="減少秒數"
+                                disabled={pose.delayMillis <= MIN_DELAY}
+                                onClick={() => onChange({delayMillis: Math.max(MIN_DELAY, pose.delayMillis - DELAY_STEP)})}
+                            />
+                        }
+                    >
+                        <Minus/>
+                    </TooltipTrigger>
+                    <TooltipContent>減少秒數</TooltipContent>
+                </Tooltip>
                 <TimeInput
                     delayMillis={pose.delayMillis}
                     onCommit={delayMillis => onChange({delayMillis})}
                 />
-                <Button
-                    variant="outline"
-                    size="icon-sm"
-                    aria-label="增加秒數"
-                    onClick={() => onChange({delayMillis: pose.delayMillis + DELAY_STEP})}
-                >
-                    <Plus/>
-                </Button>
+                <Tooltip>
+                    <TooltipTrigger
+                        render={
+                            <Button
+                                variant="outline"
+                                size="icon-sm"
+                                aria-label="增加秒數"
+                                onClick={() => onChange({delayMillis: pose.delayMillis + DELAY_STEP})}
+                            />
+                        }
+                    >
+                        <Plus/>
+                    </TooltipTrigger>
+                    <TooltipContent>增加秒數</TooltipContent>
+                </Tooltip>
             </div>
-            <Button
-                variant="ghost"
-                size="icon-sm"
-                aria-label="刪除動作"
-                onClick={onDelete}
-                className="text-muted-foreground hover:text-destructive max-sm:absolute max-sm:top-3 max-sm:right-3"
-            >
-                <Trash2/>
-            </Button>
+            <Tooltip>
+                <TooltipTrigger
+                    render={
+                        <Button
+                            variant="ghost"
+                            size="icon-sm"
+                            aria-label="刪除動作"
+                            onClick={onDelete}
+                            className="text-muted-foreground hover:text-destructive max-sm:absolute max-sm:top-3 max-sm:right-3"
+                        />
+                    }
+                >
+                    <Trash2/>
+                </TooltipTrigger>
+                <TooltipContent>刪除動作</TooltipContent>
+            </Tooltip>
         </Card>
     )
 }
@@ -245,9 +274,20 @@ export default function PaceEditor({workout}: { workout: Workout }) {
     return (
         <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-4 p-6">
             <div className="flex items-center gap-2">
-                <Link href="/settings" aria-label="返回列表" className={buttonVariants({variant: "ghost", size: "icon"})}>
-                    <ArrowLeft className="size-5"/>
-                </Link>
+                <Tooltip>
+                    <TooltipTrigger
+                        render={
+                            <Link
+                                href="/settings"
+                                aria-label="返回列表"
+                                className={buttonVariants({variant: "ghost", size: "icon"})}
+                            />
+                        }
+                    >
+                        <ArrowLeft className="size-5"/>
+                    </TooltipTrigger>
+                    <TooltipContent>返回列表</TooltipContent>
+                </Tooltip>
                 <div>
                     <div className={"flex"}>
                         <p
@@ -255,15 +295,22 @@ export default function PaceEditor({workout}: { workout: Workout }) {
                         >
                             {name || "未命名"}
                         </p>
-                        <Button
-                            variant="ghost"
-                            size="icon-sm"
-                            aria-label="編輯名稱與描述"
-                            onClick={openInfoDialog}
-                            className="text-muted-foreground"
-                        >
-                            <Pencil/>
-                        </Button>
+                        <Tooltip>
+                            <TooltipTrigger
+                                render={
+                                    <Button
+                                        variant="ghost"
+                                        size="icon-sm"
+                                        aria-label="編輯名稱與描述"
+                                        onClick={openInfoDialog}
+                                        className="text-muted-foreground"
+                                    />
+                                }
+                            >
+                                <Pencil/>
+                            </TooltipTrigger>
+                            <TooltipContent>編輯名稱與描述</TooltipContent>
+                        </Tooltip>
                     </div>
                     {description && (
                         <p className="max-w-md truncate px-1 text-sm text-muted-foreground">{description}</p>
@@ -277,16 +324,23 @@ export default function PaceEditor({workout}: { workout: Workout }) {
                             <CircleCheck className={"text-green-500"} size={20}/>}
                     </span>
                     {poses.length > 0 && (
-                        <Link
-                            href={`/player/${workout.id}`}
-                            aria-label="播放跑位"
-                            className={cn(
-                                buttonVariants({size: "icon-sm"}),
-                                "rounded-full bg-green-500 text-white hover:bg-green-600",
-                            )}
-                        >
-                            <Play className="fill-white"/>
-                        </Link>
+                        <Tooltip>
+                            <TooltipTrigger
+                                render={
+                                    <Link
+                                        href={`/player/${workout.id}`}
+                                        aria-label="播放跑位"
+                                        className={cn(
+                                            buttonVariants({size: "icon-sm"}),
+                                            "rounded-full bg-green-500 text-white hover:bg-green-600",
+                                        )}
+                                    />
+                                }
+                            >
+                                <Play className="fill-white"/>
+                            </TooltipTrigger>
+                            <TooltipContent>播放跑位</TooltipContent>
+                        </Tooltip>
                     )}
                 </div>
             </div>

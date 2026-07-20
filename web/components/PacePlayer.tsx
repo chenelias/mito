@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dialog"
 import {Input} from "@/components/ui/input"
 import PaceGrid from "@/components/PaceGrid"
+import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip"
 import {useRemote} from "@/components/RemoteProvider"
 import {Workout} from "@/lib/api"
 import {RemoteAction} from "@/lib/remote"
@@ -155,17 +156,24 @@ export default function PacePlayer({workout}: { workout: Workout }) {
     return (
         <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center gap-5 p-5">
             <div className="relative flex w-full items-center justify-center">
-                <Link
-                    href={`/settings/edit/${workout.id}`}
-                    aria-label="返回編輯"
-                    className={cn(
-                        buttonVariants({variant: "ghost", size: "icon"}),
-                        "absolute left-0",
-                        controlled && "pointer-events-none opacity-40",
-                    )}
-                >
-                    <ArrowLeft className="size-5"/>
-                </Link>
+                <Tooltip>
+                    <TooltipTrigger
+                        render={
+                            <Link
+                                href={`/settings/edit/${workout.id}`}
+                                aria-label="返回編輯"
+                                className={cn(
+                                    buttonVariants({variant: "ghost", size: "icon"}),
+                                    "absolute left-0",
+                                    controlled && "pointer-events-none opacity-40",
+                                )}
+                            />
+                        }
+                    >
+                        <ArrowLeft className="size-5"/>
+                    </TooltipTrigger>
+                    <TooltipContent>返回編輯</TooltipContent>
+                </Tooltip>
                 <div className="flex flex-col items-center gap-1">
                     {controlled && (
                         <Badge variant="outline" className="mb-3 gap-1.5 border-red-500 text-red-500">
@@ -285,33 +293,54 @@ export default function PacePlayer({workout}: { workout: Workout }) {
 
                     <div className="flex items-center gap-6 pb-4">
                         {status === "playing" ? (
-                            <Button
-                                aria-label="暫停"
-                                disabled={controlled}
-                                onClick={pause}
-                                className="size-16 rounded-full bg-green-500 text-white shadow-lg hover:bg-green-600"
-                            >
-                                <Pause className="size-7 fill-white"/>
-                            </Button>
+                            <Tooltip>
+                                <TooltipTrigger
+                                    render={
+                                        <Button
+                                            aria-label="暫停"
+                                            disabled={controlled}
+                                            onClick={pause}
+                                            className="size-16 rounded-full bg-green-500 text-white shadow-lg hover:bg-green-600"
+                                        />
+                                    }
+                                >
+                                    <Pause className="size-7 fill-white"/>
+                                </TooltipTrigger>
+                                <TooltipContent>暫停</TooltipContent>
+                            </Tooltip>
                         ) : (
-                            <Button
-                                aria-label={status === "paused" ? "繼續" : "開始"}
-                                disabled={controlled}
-                                onClick={() => (status === "paused" ? resume() : start())}
-                                className="size-16 rounded-full bg-green-500 text-white shadow-lg hover:bg-green-600"
-                            >
-                                <Play className="size-7 fill-white"/>
-                            </Button>
+                            <Tooltip>
+                                <TooltipTrigger
+                                    render={
+                                        <Button
+                                            aria-label={status === "paused" ? "繼續" : "開始"}
+                                            disabled={controlled}
+                                            onClick={() => (status === "paused" ? resume() : start())}
+                                            className="size-16 rounded-full bg-green-500 text-white shadow-lg hover:bg-green-600"
+                                        />
+                                    }
+                                >
+                                    <Play className="size-7 fill-white"/>
+                                </TooltipTrigger>
+                                <TooltipContent>{status === "paused" ? "繼續" : "開始"}</TooltipContent>
+                            </Tooltip>
                         )}
                         {running && (
-                            <Button
-                                aria-label="停止"
-                                disabled={controlled}
-                                onClick={stop}
-                                className="size-16 rounded-2xl bg-red-500 text-white shadow-lg hover:bg-red-600"
-                            >
-                                <Square className="size-6 fill-white"/>
-                            </Button>
+                            <Tooltip>
+                                <TooltipTrigger
+                                    render={
+                                        <Button
+                                            aria-label="停止"
+                                            disabled={controlled}
+                                            onClick={stop}
+                                            className="size-16 rounded-2xl bg-red-500 text-white shadow-lg hover:bg-red-600"
+                                        />
+                                    }
+                                >
+                                    <Square className="size-6 fill-white"/>
+                                </TooltipTrigger>
+                                <TooltipContent>停止</TooltipContent>
+                            </Tooltip>
                         )}
                     </div>
 

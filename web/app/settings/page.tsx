@@ -14,6 +14,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import PaceGrid from "@/components/PaceGrid"
+import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip"
 import {listWorkouts, Workout} from "@/lib/api"
 import {createWorkoutAction, deleteWorkoutAction} from "@/app/actions"
 
@@ -67,18 +68,25 @@ export default async function SettingsPage() {
                         </Link>
                         <div className="relative transition-opacity group-hover:opacity-100 focus-within:opacity-100">
                             <AlertDialog>
-                                <AlertDialogTrigger
-                                    render={
-                                        <Button
-                                            variant="ghost"
-                                            size="icon-sm"
-                                            aria-label={`刪除 ${workout.name}`}
-                                            className="text-muted-foreground"
-                                        />
-                                    }
-                                >
-                                    <Trash2/>
-                                </AlertDialogTrigger>
+                                <Tooltip>
+                                    <TooltipTrigger
+                                        render={
+                                            <AlertDialogTrigger
+                                                render={
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon-sm"
+                                                        aria-label={`刪除 ${workout.name}`}
+                                                        className="text-muted-foreground"
+                                                    />
+                                                }
+                                            />
+                                        }
+                                    >
+                                        <Trash2/>
+                                    </TooltipTrigger>
+                                    <TooltipContent>刪除跑位</TooltipContent>
+                                </Tooltip>
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
                                         <AlertDialogTitle>刪除跑位？</AlertDialogTitle>
