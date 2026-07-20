@@ -39,11 +39,19 @@ export type WorkoutList = {
 const BASE = process.env.API_HOST ?? "http://localhost:8080"
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-    const res = await fetch(`${BASE}${path}`, {
-        ...init,
-        cache: "no-store",
-        headers: {"Content-Type": "application/json", ...init?.headers},
-    })
+    let res: Response
+    try {
+        res = await fetch(`${BASE}${path}`, {
+            ...init,
+            cache: "no-store",
+            headers: {"Content-Type": "application/json", ...init?.headers},
+            // Fail fast instead of hanging navigation when the API is down/cold
+            signal: AbortSignal.timeout(10_000),
+        })
+    } catch (e) {
+        if ((e as Error).name === "TimeoutError") throw new Error("伺服器沒有回應，請稍後再試")
+        throw e
+    }
     if (!res.ok) {
         let message = `Request failed (${res.status})`
         try {

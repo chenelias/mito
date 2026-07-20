@@ -80,25 +80,23 @@ export default function RemoteProvider({wsUrl, children}: { wsUrl: string; child
                     if (action.kind === "connect") {
                         setSession({
                             controllerName,
-                            workoutId: action.workoutId,
-                            workoutName: action.workoutName,
+                            workout: action.workout,
                             mode: "once",
                             times: 1,
                             status: "idle",
                             startedAt: 0,
                         })
-                        goToPlayer(action.workoutId)
+                        goToPlayer(action.workout.id)
                     } else if (action.kind === "start") {
                         setSession({
                             controllerName,
-                            workoutId: action.workoutId,
-                            workoutName: action.workoutName,
+                            workout: action.workout,
                             mode: action.mode,
                             times: action.times,
                             status: "playing",
                             startedAt: Date.now(),
                         })
-                        goToPlayer(action.workoutId)
+                        goToPlayer(action.workout.id)
                     } else if (action.kind === "pause") {
                         setSession(prev => (prev ? {...prev, status: "paused"} : prev))
                     } else if (action.kind === "resume") {

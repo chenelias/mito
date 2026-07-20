@@ -1,3 +1,5 @@
+import {Workout} from "@/lib/api"
+
 export type RemoteClient = {
     id: string
     name: string
@@ -5,9 +7,11 @@ export type RemoteClient = {
 
 export type RemoteMode = "once" | "times" | "loop"
 
+// connect/start carry the full workout so a controlled device can render the
+// player immediately, without waiting on its own API round trip
 export type RemoteAction =
-    | {kind: "connect"; workoutId: string; workoutName: string}
-    | {kind: "start"; workoutId: string; workoutName: string; mode: RemoteMode; times: number}
+    | {kind: "connect"; workout: Workout}
+    | {kind: "start"; workout: Workout; mode: RemoteMode; times: number}
     | {kind: "pause"}
     | {kind: "resume"}
     | {kind: "stop"}
@@ -16,8 +20,7 @@ export type RemoteAction =
 /** Playback state of this client while it is being remote controlled */
 export type RemoteSession = {
     controllerName: string
-    workoutId: string
-    workoutName: string
+    workout: Workout
     mode: RemoteMode
     times: number
     status: "idle" | "playing" | "paused"

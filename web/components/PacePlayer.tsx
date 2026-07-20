@@ -40,7 +40,13 @@ export default function PacePlayer({workout}: { workout: Workout }) {
     const [localTimes, setLocalTimes] = useState(3)
     const [localStatus, setLocalStatus] = useState<Status>("idle")
     const [controlledDone, setControlledDone] = useState(false)
-    const [elapsed, setElapsed] = useState(0)
+    // If mounted mid-play (remote start arrived before the page finished
+    // loading), pick up the clock where the controller's start left it
+    const [elapsed, setElapsed] = useState(() =>
+        session?.status === "playing" && session.startedAt > 0
+            ? Math.max(0, Date.now() - session.startedAt)
+            : 0,
+    )
 
     const [remoteOpen, setRemoteOpen] = useState(false)
     const [linked, setLinked] = useState(false)
@@ -105,7 +111,7 @@ export default function PacePlayer({workout}: { workout: Workout }) {
     function connectTargets() {
         setRemoteOpen(false)
         setLinked(true)
-        sendControl(targets, {kind: "connect", workoutId: workout.id, workoutName: workout.name})
+        sendControl(targets, {kind: "connect", workout})
     }
 
     function disconnectTargets() {
@@ -128,8 +134,7 @@ export default function PacePlayer({workout}: { workout: Workout }) {
         setLocalStatus("playing")
         broadcast({
             kind: "start",
-            workoutId: workout.id,
-            workoutName: workout.name,
+            workout,
             mode: localMode,
             times: Math.max(1, localTimes),
         })
