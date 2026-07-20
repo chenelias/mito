@@ -3,6 +3,8 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
+import RemoteProvider from "@/components/RemoteProvider";
+import NextTopLoader from "nextjs-toploader";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -25,6 +27,11 @@ export const metadata: Metadata = {
   },
 };
 
+function wsUrl() {
+  const apiHost = process.env.API_HOST ?? "http://localhost:8080";
+  return apiHost.replace(/^http/, "ws") + "/remote";
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -36,8 +43,11 @@ export default function RootLayout({
       className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
     >
       <body className="min-h-full flex flex-col">
-        <Header />
-        <div className="flex flex-1 flex-col pt-[66px]">{children}</div>
+        <NextTopLoader color="#a3e635" height={3} showSpinner={false} shadow={false} />
+        <RemoteProvider wsUrl={wsUrl()}>
+          <Header />
+          <div className="flex flex-1 flex-col">{children}</div>
+        </RemoteProvider>
       </body>
     </html>
   );
