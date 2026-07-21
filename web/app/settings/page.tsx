@@ -1,3 +1,4 @@
+import type {Metadata} from "next"
 import Link from "next/link"
 import {Plus, Trash2} from "lucide-react"
 import {Button} from "@/components/ui/button"
@@ -19,6 +20,10 @@ import {listWorkouts, Workout} from "@/lib/api"
 import {createWorkoutAction, deleteWorkoutAction} from "@/app/actions"
 
 export const dynamic = "force-dynamic"
+
+export const metadata: Metadata = {
+    title: "我的跑位 | Mito",
+}
 
 export default async function SettingsPage() {
     let workouts: Workout[] = []

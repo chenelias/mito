@@ -1,3 +1,4 @@
+import type {Metadata} from "next"
 import Link from "next/link"
 import {redirect} from "next/navigation"
 import {ArrowLeft} from "lucide-react"
@@ -6,6 +7,20 @@ import PacePlayer from "@/components/PacePlayer"
 import {getWorkout, Workout} from "@/lib/api"
 
 export const dynamic = "force-dynamic"
+
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ id: string }>
+}): Promise<Metadata> {
+    const {id} = await params
+    try {
+        const workout = await getWorkout(id)
+        return {title: `播放「${workout.name}」| Mito`}
+    } catch {
+        return {title: "播放跑位 | Mito"}
+    }
+}
 
 export default async function PlayerPage({
     params,
